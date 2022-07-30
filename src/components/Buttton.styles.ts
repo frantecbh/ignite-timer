@@ -6,24 +6,20 @@ interface ButtonContainerProps {
     variant: ButtonVariant
 }
 
-const buttonVariants = {
-    primary: 'purple',
-    secondary: 'purple',
-    danger: 'red',
-    success: 'green',
-}
 
 export const ButtonContaniner = styled.button<ButtonContainerProps>`
 
 width: 100px;
 height: 40px;
+border: 0;
 margin: 8px;
+border-radius: 5px;
 
-background-color: ${props => props.theme.secondary};
-color: ${props => props.theme.white}
+background-color: ${props => props.theme["green-500"]};
+color: ${props => props.theme.white};
 
-/* ${props => {
-        return css`background-color: ${buttonVariants[props.variant]}`
-    }} */
+
+
+
 
 `
