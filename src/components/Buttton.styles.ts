@@ -19,7 +19,7 @@ width: 100px;
 height: 40px;
 margin: 8px;
 
-background-color: ${props => props.theme.primary};
+background-color: ${props => props.theme.secondary};
 color: ${props => props.theme.white}
 
 /* ${props => {
