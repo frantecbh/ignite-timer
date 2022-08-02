@@ -18,12 +18,23 @@ export const Home = () => {
                     <TaskInput
                         type="text"
                         id="task"
+                        list='task-sugestions'
                         placeholder="Dê um nome para seu projeto" />
+                    <datalist id="task-sugestions">
+                        <option value="Example 1" />
+                        <option value="Example 2" />
+                        <option value="Example 3" />
+                        <option value="Example 4" />
+                    </datalist>
+
                     <label htmlFor="minutsAmount">durante</label>
                     <MinutesAmmountInput
                         type="number"
                         id="minutsAmount"
-                        placeholder="00" />
+                        placeholder="00"
+                        step={5}
+                        min={5}
+                        max={60} />
                     <span>minutos</span>
                 </FormContainer>
                 <CountdownContainer>
