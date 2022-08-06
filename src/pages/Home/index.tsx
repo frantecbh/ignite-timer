@@ -1,4 +1,6 @@
 import { Play } from 'phosphor-react'
+
+import { useForm } from 'react-hook-form'
 import {
     CountdownContainer,
     FormContainer,
@@ -9,17 +11,34 @@ import {
     TaskInput,
 } from './styles'
 
+
+
+
 export const Home = () => {
+
+    const { register, handleSubmit, watch } = useForm()
+
+    function handleCreateNewCycle(data: any) {
+        console.log(data)
+    }
+
+    const task = watch('task')
+    const isSubmitDisabled = !task
+
     return (
         <HomeContainer>
-            <form action="">
+            <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
                 <FormContainer>
                     <label htmlFor="task">Vou trabalhar em</label>
                     <TaskInput
                         type="text"
                         id="task"
                         list='task-sugestions'
-                        placeholder="Dê um nome para seu projeto" />
+                        placeholder="Dê um nome para seu projeto"
+                        {
+                        ...register('task')
+                        }
+                    />
                     <datalist id="task-sugestions">
                         <option value="Example 1" />
                         <option value="Example 2" />
@@ -34,7 +53,11 @@ export const Home = () => {
                         placeholder="00"
                         step={5}
                         min={5}
-                        max={60} />
+                        max={60}
+                        {
+                        ...register('minutsAmount', { valueAsNumber: true })
+                        }
+                    />
                     <span>minutos</span>
                 </FormContainer>
                 <CountdownContainer>
@@ -45,7 +68,7 @@ export const Home = () => {
                     <span>0</span>
                 </CountdownContainer>
 
-                <StartCountDowButton disabled type="submit">
+                <StartCountDowButton disabled={isSubmitDisabled} type="submit">
                     <Play />
                     Começar
                 </StartCountDowButton>
