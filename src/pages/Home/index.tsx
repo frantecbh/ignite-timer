@@ -27,7 +27,7 @@ interface NewCicleFormData {
 
 export const Home = () => {
 
-    const { register, handleSubmit, watch } = useForm<NewCicleFormData>({
+    const { register, handleSubmit, watch, reset } = useForm<NewCicleFormData>({
         resolver: zodResolver(newCycleFormValidationSchema),
         defaultValues: {
             task: '',
@@ -37,6 +37,8 @@ export const Home = () => {
 
     function handleCreateNewCycle(data: NewCicleFormData) {
         console.log(data)
+
+        reset()
     }
 
     const task = watch('task')
