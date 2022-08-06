@@ -13,6 +13,7 @@ import {
     StartCountDowButton,
     TaskInput,
 } from './styles'
+import { useState } from 'react'
 
 
 const newCycleFormValidationSchema = zod.object({
@@ -25,7 +26,17 @@ interface NewCicleFormData {
     minutsAmount: number
 }
 
+interface Cycle {
+    id: string;
+    task: string;
+    minutsAmount: number
+}
+
 export const Home = () => {
+
+    const [cicles, setCycles] = useState<Cycle[]>([])
+    const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
+
 
     const { register, handleSubmit, watch, reset } = useForm<NewCicleFormData>({
         resolver: zodResolver(newCycleFormValidationSchema),
@@ -35,12 +46,23 @@ export const Home = () => {
         }
     })
 
-    function handleCreateNewCycle(data: NewCicleFormData) {
-        console.log(data)
+    function handleCreateNewCycle({ task, minutsAmount }: NewCicleFormData) {
+        const newCicle: Cycle = {
+            id: String(cicles.length + 1),
+            task,
+            minutsAmount
 
+
+        }
+
+        setCycles((state) => [...state, newCicle])
+        setActiveCycleId(newCicle.id)
         reset()
     }
 
+    const activeCycle = cicles.find((cicle) => cicle.id === activeCycleId)
+
+    console.log(activeCycle)
     const task = watch('task')
     const isSubmitDisabled = !task
 
