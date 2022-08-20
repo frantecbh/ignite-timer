@@ -3,6 +3,7 @@ import { Play } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
+import { differenceInSeconds } from 'date-fns'
 
 import {
     CountdownContainer,
@@ -13,7 +14,7 @@ import {
     StartCountDowButton,
     TaskInput,
 } from './styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 
 const newCycleFormValidationSchema = zod.object({
@@ -29,7 +30,8 @@ interface NewCicleFormData {
 interface Cycle {
     id: string;
     task: string;
-    minutsAmount: number
+    minutsAmount: number,
+    startDate: Date
 }
 
 export const Home = () => {
@@ -52,17 +54,37 @@ export const Home = () => {
         const newCicle: Cycle = {
             id: String(cicles.length + 1),
             task,
-            minutsAmount
+            minutsAmount,
+            startDate: new Date(),
 
 
         }
 
         setCycles((state) => [...state, newCicle])
         setActiveCycleId(newCicle.id)
+        setAmountSecondsPassed(0)
         reset()
     }
 
     const activeCycle = cicles.find((cicle) => cicle.id === activeCycleId)
+
+    useEffect(() => {
+        let interval: number;
+
+        if (activeCycle) {
+            setInterval(() => {
+                setAmountSecondsPassed(
+                    differenceInSeconds(new Date(), activeCycle.startDate)
+                )
+
+            }, 1000)
+        }
+
+        return () => {
+            clearInterval(interval)
+        }
+
+    }, [activeCycle])
 
     const totalSeconds = activeCycle ? activeCycle.minutsAmount * 60 : 0
     const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
@@ -72,6 +94,14 @@ export const Home = () => {
 
     const minutos = String(minutesAmount).padStart(2, "0")
     const segundos = String(secondsAmount).padStart(2, "0")
+
+
+    useEffect(() => {
+        if (activeCycle) {
+            document.title = `${minutos}:${segundos}`
+        }
+    }, [minutos, segundos, activeCycle])
+
 
 
     const task = watch('task')
